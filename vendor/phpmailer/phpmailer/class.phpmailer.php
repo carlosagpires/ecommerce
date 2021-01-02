@@ -33,6 +33,9 @@ class PHPMailer
      */
     public $Version = '5.2.22';
 
+    const ENCRYPTION_STARTTLS = 'tls';
+    const ENCRYPTION_SMTPS = 'ssl';
+
     /**
      * Email priority.
      * Options: null (default), 1 = High, 3 = Normal, 5 = low.
