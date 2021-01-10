@@ -23,7 +23,7 @@ $app->get("/categories/:idcategory", function($idcategory){
 	$page = new Page();
 	$page->setTpl("category", array(
 		"category" => $category->getValues(),
-		"products" => array()
+		"products" => Product::checkList($category->getProducts())
 	));
 	exit;
 

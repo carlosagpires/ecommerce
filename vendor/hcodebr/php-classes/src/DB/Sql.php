@@ -43,6 +43,17 @@ class Sql {
 	public function query($rawQuery, $params = array())
 	{
 
+		try {
+
+			$stmt = $this->conn->prepare($rawQuery);
+			$this->setParams($stmt, $params);
+			$stmt->execute();
+
+		} catch (\Throwable $th) {
+			throw new \Exception("Ocorreu um erro no acesso à base de dados: $th");
+			exit;
+		}
+
 		$stmt = $this->conn->prepare($rawQuery);
 
 		$this->setParams($stmt, $params);
@@ -54,13 +65,17 @@ class Sql {
 	public function select($rawQuery, $params = array()):array
 	{
 
-		$stmt = $this->conn->prepare($rawQuery);
+		try {
+			$stmt = $this->conn->prepare($rawQuery);
+			$this->setParams($stmt, $params);
+			$stmt->execute();
+	
+			return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-		$this->setParams($stmt, $params);
-
-		$stmt->execute();
-
-		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		} catch (\Throwable $th) {
+			throw new \Exception("Ocorreu um erro no acesso à base de dados: $th");
+			exit;
+		}
 
 	}
 
