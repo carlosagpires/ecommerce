@@ -4,6 +4,11 @@ use Hcode\Page;
 use Hcode\Model\Category;
 use Hcode\Model\Product;
 
+if (!isset($app))
+{
+    $app = new Slim();
+}
+
 $app->get('/', function() {
 
 	$products = Product::listAll();
@@ -41,6 +46,19 @@ $app->get("/categories/:idcategory", function($idcategory){
 		"pages" => $pages
 	));
 	exit;
+
+});
+
+$app->get("/products/:desurl", function($desurl){
+
+	$product = new Product();
+	$product->getFromURL($desurl);
+
+	$page = new Page();
+	$page->setTpl("product-detail", array(
+		"product" => $product->getValues(),
+		"categories" => $product->getCategories()
+	));
 
 });
 
