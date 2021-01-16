@@ -1,8 +1,10 @@
-<?php 
+<?php
 
+use Hcode\Model\Cart;
 use Hcode\Page;
 use Hcode\Model\Category;
 use Hcode\Model\Product;
+use Slim\Slim;
 
 if (!isset($app))
 {
@@ -62,5 +64,13 @@ $app->get("/products/:desurl", function($desurl){
 
 });
 
+$app->get("/cart", function(){
+
+	$cart = Cart::getFromSession();
+	
+	$page = new Page();
+	$page->setTpl("cart");
+	
+});
 
 ?>
