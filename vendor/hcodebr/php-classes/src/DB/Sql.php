@@ -54,12 +54,6 @@ class Sql {
 			exit;
 		}
 
-		$stmt = $this->conn->prepare($rawQuery);
-
-		$this->setParams($stmt, $params);
-
-		$stmt->execute();
-
 	}
 
 	public function select($rawQuery, $params = array()):array
