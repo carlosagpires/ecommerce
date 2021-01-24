@@ -193,19 +193,21 @@ class User extends Model
         pinadmin TINYINT
         */
 
-        $results = $sql->select("
-            CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)
-            ",
-            array(
-                ":iduser" => $this->getiduser(),
-                ":desperson" => $this->getdesperson(),
-                ":deslogin" => $this->getdeslogin(),
-                ":despassword" => User::getPasswordHash($this->getdespassword()),
-                ":desemail" => $this->getdesemail(),
-                ":nrphone" => $this->getnrphone(),
-                ":inadmin" => $this->getinadmin()
-            )
+        $select = "CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)";
+        $options = array(
+            ":iduser" => $this->getiduser(),
+            ":desperson" => $this->getdesperson(),
+            ":deslogin" => $this->getdeslogin(),
+            ":despassword" => User::getPasswordHash($this->getdespassword()),
+            ":desemail" => $this->getdesemail(),
+            ":nrphone" => $this->getnrphone(),
+            ":inadmin" => $this->getinadmin()
         );
+
+        //var_dump($options);
+        //exit;
+
+        $results = $sql->select($select, $options);
 
         //var_dump($results);
 
@@ -359,7 +361,7 @@ class User extends Model
 
 		$_SESSION[User::ERROR] = NULL;
 
-	}
+    }
 
 	public static function setSuccess($msg)
 	{
@@ -427,9 +429,18 @@ class User extends Model
 	public static function getPasswordHash($password)
 	{
 
-		return password_hash($password, PASSWORD_DEFAULT, [
-			'cost'=>12
-		]);
+        if (password_needs_rehash($password, PASSWORD_DEFAULT, ["cost"=>12]))
+        {
+            return password_hash($password, PASSWORD_DEFAULT, [
+			    'cost'=>12
+		    ]);
+        }
+        else
+        {
+            return $password;
+        }
+
+
 
     }
 
