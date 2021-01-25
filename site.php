@@ -546,4 +546,39 @@ $app->get("/boleto/:idorder", function($idorder){
 
 });
 
+$app->get("/profile/orders", function(){
+
+	User::verifyLogin(false);
+
+	$user = User::getFromSession();
+
+	$page = new Page();
+
+	$page->setTpl("profile-orders", array(
+		"orders" => $user->getOrders()
+	));
+
+});
+
+$app->get("/profile/orders/:idorder", function($idorder){
+
+	User::verifyLogin(false);
+
+	$order = new Order();
+	$cart = new Cart();
+
+	$order->get((int)$idorder);
+	$cart->get((int)$order->getidcart());
+	$cart->getCalculateTotal();
+
+	$page = new Page();
+
+	$page->setTpl("profile-orders-detail", array(
+		"order" => $order->getValues(),
+		"cart" => $cart->getValues(),
+		"products" => $cart->getProducts()
+	));
+
+});
+
 ?>
