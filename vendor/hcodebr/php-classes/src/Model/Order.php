@@ -15,14 +15,20 @@ class Order extends Model
     {
         $sql = new Sql();
 
-        $results = $sql->select("CALL sp_orders_save(:idorder, :idcart, :iduser, :idstatus, :idaddress, :vltotal)", array(
+        if ($this->getidorder() === null) $this->setidorder(0);
+
+
+        $params = array(
             ":idorder" => $this->getidorder(),
             ":idcart" => $this->getidcart(),
             ":iduser" => $this->getiduser(),
             ":idstatus" => $this->getidstatus(),
             ":idaddress" => $this->getidaddress(),
             ":vltotal" => $this->getvltotal()
-        ));
+        );
+
+
+        $results = $sql->select("CALL sp_orders_save(:idorder, :idcart, :iduser, :idstatus, :idaddress, :vltotal)", $params);
 
         if (count($results) > 0)
         {

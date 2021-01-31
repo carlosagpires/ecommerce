@@ -54,18 +54,24 @@ class Address extends Model
 
         $sql = new Sql();
 
-        $results = $sql->select("CALL sp_addresses_save(:idaddress, :idperson, :desaddress, :descomplement, :descity, :desstate,
-            :descountry, :deszipcode, :desdistrict)", array(
-                ":idaddress" => $this->getidaddress(),
-                ":idperson" => $this->getidperson(),
-                ":desaddress" => $this->getdesaddress(),
-                ":descomplement" => $this->getdescomplement(),
-                ":descity" => $this->getdescity(),
-                ":desstate" => $this->getdesstate(),
-                ":descountry" => $this->getdescountry(),
-                ":deszipcode" => $this->getdeszipcode(),
-                ":desdistrict" => $this->getdesdistrict()
-            ));
+        $params = array(
+            ":idaddress" => $this->getidaddress(),
+            ":idperson" => $this->getidperson(),
+            ":desaddress" => $this->getdesaddress(),
+            ":desnumber" => $this->getdesnumber(),
+            ":descomplement" => $this->getdescomplement(),
+            ":descity" => $this->getdescity(),
+            ":desstate" => $this->getdesstate(),
+            ":descountry" => $this->getdescountry(),
+            ":deszipcode" => $this->getdeszipcode(),
+            ":desdistrict" => $this->getdesdistrict()
+        );
+
+        //var_dump($params);
+        //exit;
+
+        $results = $sql->select("CALL sp_addresses_save(:idaddress, :idperson, :desaddress, :desnumber, :descomplement, :descity, :desstate,
+            :descountry, :deszipcode, :desdistrict)", $params);
 
             if (count($results) > 0)
             {

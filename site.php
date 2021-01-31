@@ -68,19 +68,6 @@ $app->get("/products/:desurl", function($desurl){
 
 });
 
-$app->get("/cart", function(){
-
-	$cart = Cart::getFromSession();
-	
-	$page = new Page();
-	$page->setTpl("cart", array(
-		"cart" => $cart->getValues(),
-		"products" => $cart->getProducts(),
-		"error" => Cart::getMsgError()
-	));
-	
-});
-
 $app->get("/cart/:idproduct/add", function($idproduct){
 
 	$product = new Product();
@@ -120,6 +107,24 @@ $app->get("/cart/:idproduct/remove", function($idproduct){
 	exit;
 });
 
+$app->get("/cart", function(){
+
+	$cart = Cart::getFromSession();
+
+	if (!$cart->getdeszipcode()) $cart->setdeszipcode(0);
+	if (!$cart->getvlfreight()) $cart->setvlfreight(0);
+	if (!$cart->getnrdays()) $cart->setnrdays(0);
+	
+	$page = new Page();
+	$page->setTpl("cart", array(
+		"cart" => $cart->getValues(),
+		"products" => $cart->getProducts(),
+		"error" => Cart::getMsgError()
+	));
+	
+});
+
+
 $app->post("/cart/freight", function(){
 
 	$cart = Cart::getFromSession();
@@ -150,12 +155,15 @@ $app->get("/checkout", function(){
 	}
 
 	if (!$address->getdesaddress()) $address->setdesaddress("");
+	if (!$address->getdesnumber()) $address->setdesnumber("");
 	if (!$address->getdescomplement()) $address->setdescomplement("");
 	if (!$address->getdesdistrict()) $address->setdesdistrict("");
 	if (!$address->getdescity()) $address->setdescity("");
 	if (!$address->getdesstate()) $address->setdesstate("");
 	if (!$address->getdescountry()) $address->setdescountry("");
-	if (!$address->getdeszipcode()) $address->setdeszipcodegetdeszipcode("");
+	if (!$address->getdeszipcode()) $address->setdeszipcode("");
+
+	if (!$cart->getvlfreight()) $cart->setvlfreight(0);
 
 	$page = new Page();
 	$page->setTpl("checkout", array(
@@ -170,6 +178,7 @@ $app->get("/checkout", function(){
 $app->post("/checkout", function(){
 
 	User::verifyLogin(false);
+
 
 	if (!isset($_POST["zipcode"]) || $_POST["zipcode"] === "")
 	{
@@ -212,6 +221,7 @@ $app->post("/checkout", function(){
 		header("Location: /checkout");
 		exit;
 	}
+
 	
 	$user = User::getFromSession();
 	$address = new Address();

@@ -17,6 +17,7 @@ class Cart extends Model
     {
         $cart = new Cart();
 
+
         if (isset($_SESSION[Cart::SESSION]) && (int)$_SESSION[Cart::SESSION]["idcart"] > 0)
         {
             $cart->get((int)$_SESSION[Cart::SESSION]["idcart"]);
@@ -24,6 +25,9 @@ class Cart extends Model
         else
         {
             $cart->getFromSessionID();
+
+            //var_dump("teste");
+
             if (!(int)$cart->getidcart() > 0)
             {
                 $data = array(
@@ -234,7 +238,7 @@ class Cart extends Model
 
 		} else {
 
-
+            $this->setdeszipcode($nrzipcode);
 
 		}
 
