@@ -11,6 +11,14 @@ function formatPrice($vlprice)
     }
 }
 
+function formatDate($date)
+{
+    if ($date != NULL)
+    {
+        return date("d/m/Y", strtotime($date));
+    }
+}
+
 function checkLogin($inadmin = true)
 {
 

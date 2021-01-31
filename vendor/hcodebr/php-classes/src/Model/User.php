@@ -212,6 +212,7 @@ class User extends Model
         //var_dump($results);
 
         $this->setData($results[0]);
+
     }
 
     public function deleteDB()
